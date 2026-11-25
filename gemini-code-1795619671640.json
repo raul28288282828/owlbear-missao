@@ -1,0 +1,12 @@
+{
+  "name": "Anúncio de Missão",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "action": {
+    "title": "Missões",
+    "icon": "/icon.svg",
+    "popover": "/index.html",
+    "height": 320,
+    "width": 350
+  }
+}

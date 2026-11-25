@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: rgba(15, 15, 20, 0.92);
+      color: #ffffff; /* Texto branco */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+    }
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      padding-bottom: 8px;
+      width: 80%;
+    }
+    p {
+      margin: 0 0 20px 0;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #ffffff;
+      white-space: pre-wrap;
+    }
+    button {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      padding: 6px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    button:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">MISSÃO</h1>
+  <p id="description"></p>
+  <button id="close-btn">Aceitar / Fechar</button>
+
+  <script type="module">
+    import OBR from "https://cdn.jsdelivr.net/npm/@owlbear-rodeo/sdk/+esm";
+
+    // Pega o texto passado na URL
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("title").textContent = params.get("title") || "NOVA MISSÃO";
+    document.getElementById("description").textContent = params.get("text") || "";
+
+    OBR.onReady(() => {
+      document.getElementById("close-btn").addEventListener("click", () => {
+        OBR.modal.close("modal-missao");
+      });
+    });
+  </script>
+</body>
+</html>

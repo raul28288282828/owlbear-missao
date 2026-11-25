@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #1e1e24;
+      color: #ffffff;
+      padding: 16px;
+      margin: 0;
+    }
+    h3 { margin-top: 0; font-size: 16px; }
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2b2b36;
+      color: #fff;
+      font-family: inherit;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #6c5ce7;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background-color: #5a4bd1; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="gm-panel" class="hidden">
+    <h3>Nova Missão</h3>
+    <input type="text" id="mission-title" placeholder="Título (ex: NOVA MISSÃO)" value="NOVA MISSÃO" />
+    <textarea id="mission-text" rows="5" placeholder="Descreva o objetivo para os jogadores..."></textarea>
+    <button id="send-btn">Exibir no VTT</button>
+  </div>
+  <div id="player-msg" class="hidden">
+    <p>Apenas o Mestre pode enviar missões.</p>
+  </div>
+
+  <script type="module">
+    import OBR from "https://cdn.jsdelivr.net/npm/@owlbear-rodeo/sdk/+esm";
+
+    const CHANNEL = "com.minhaextensao.missao";
+
+    OBR.onReady(async () => {
+      const role = await OBR.player.getRole();
+
+      // Mostra o painel apenas se for o Mestre (GM)
+      if (role === "GM") {
+        document.getElementById("gm-panel").classList.remove("hidden");
+      } else {
+        document.getElementById("player-msg").classList.remove("hidden");
+      }
+
+      // Escuta mensagens recebidas (para abrir o modal na tela de todos)
+      OBR.broadcast.onMessage(CHANNEL, (event) => {
+        const { title, text } = event.data;
+        const params = new URLSearchParams({ title, text });
+
+        OBR.modal.open({
+          id: "modal-missao",
+          url: `/mission-view.html?${params.toString()}`,
+          height: 250,
+          width: 500,
+        });
+      });
+
+      // Botão de envio do Mestre
+      document.getElementById("send-btn").addEventListener("click", async () => {
+        const title = document.getElementById("mission-title").value;
+        const text = document.getElementById("mission-text").value;
+
+        if (!text.trim()) return;
+
+        // Envia para todos na sala (destination: "ALL" inclui o próprio Mestre)
+        await OBR.broadcast.sendMessage(CHANNEL, { title, text }, { destination: "ALL" });
+      });
+    });
+  </script>
+</body>
+</html>

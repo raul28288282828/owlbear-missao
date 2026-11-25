@@ -1,0 +1,5 @@
+minha-extensao-missao/
+├── manifest.json       # Diz ao Owlbear o nome, ícone e onde está a extensão
+├── index.html          # Painel do Mestre (onde você digita o texto)
+├── mission-view.html   # A tela da missão que aparece para os jogadores
+└── icon.svg            # Ícone da extensão na barra do Owlbear
